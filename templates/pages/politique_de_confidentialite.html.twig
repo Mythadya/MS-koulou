@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center mb-4">Politique de confidentialité</h1>
+        <p class="text-center">Nous nous engageons à protéger votre vie privée. Cette politique explique comment nous collectons, utilisons et partageons vos informations personnelles.</p>
+
+        <!-- Section Collecte d'informations -->
+        <div class="privacy-section mb-4">
+            <h2><i class="bi bi-file-earmark-text icon"></i> Collecte d'informations</h2>
+            <p>Nous collectons des informations lorsque vous utilisez notre site, telles que :</p>
+            <ul>
+                <li>Votre nom</li>
+                <li>Adresse e-mail</li>
+                <li>Numéro de téléphone</li>
+                <li>Adresse IP et informations sur votre appareil</li>
+            </ul>
+        </div>
+
+        <!-- Section Utilisation des informations -->
+        <div class="privacy-section mb-4">
+            <h2><i class="bi bi-arrow-right-circle icon"></i> Utilisation des informations</h2>
+            <p>Nous utilisons vos informations pour :</p>
+            <ul>
+                <li>Améliorer nos services</li>
+                <li>Vous contacter pour des mises à jour importantes</li>
+                <li>Vous envoyer des informations pertinentes et des offres spéciales</li>
+            </ul>
+        </div>
+
+        <!-- Section Partage d'informations -->
+        <div class="privacy-section mb-4">
+            <h2><i class="bi bi-share icon"></i> Partage d'informations</h2>
+            <p>Nous ne vendons pas vos informations à des tiers. Nous partageons vos informations uniquement :</p>
+            <ul>
+                <li>Avec votre consentement</li>
+                <li>Lorsque cela est requis par la loi</li>
+                <li>Pour protéger nos droits ou la sécurité des autres</li>
+            </ul>
+        </div>
+
+        <!-- Section Vos droits -->
+        <div class="privacy-section mb-4">
+            <h2><i class="bi bi-shield-lock icon"></i> Vos droits</h2>
+            <p>Vous avez le droit de :</p>
+            <ul>
+                <li>Accéder à vos informations</li>
+                <li>Les corriger si elles sont inexactes</li>
+                <li>Demander leur suppression</li>
+                <li>Retirer votre consentement au traitement de vos données</li>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .privacy-section {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #ffffff;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .icon {
+            margin-right: 8px;
+            color: #007bff;
+        }
+
+        ul {
+            margin-left: 20px;
+            list-style-type: disc;
+        }
+    </style>
+{% endblock %}

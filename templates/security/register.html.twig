@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création de compte{% endblock %}
+
+{% block body %}
+
+    <div class='container mt-5'>
+        <div class='row justify-content-center'>
+            <div class="col-md-8">
+                <h1 class="mb-4 text-center">Créer un compte</h1>
+
+                <!-- Vérification s'il y a des erreurs avant d'afficher la barre rouge -->
+                {% if form_errors(registrationForm) %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(registrationForm) }}
+                    </div>
+                {% endif %}
+
+                <!-- Début du formulaire -->
+                {{ form_start(registrationForm) }}
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.nom, {'attr': {'placeholder': 'Nom'}}) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.prenom, {'attr': {'placeholder': 'Prénom'}}) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.email, {'attr': {'placeholder': 'Adresse email'}}) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.plainPassword, {
+                        'label': 'Mot de passe',
+                        'attr': {'placeholder': 'Mot de passe'}
+                    }) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.telephone, {'attr': {'placeholder': 'Numéro de téléphone'}}) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_row(registrationForm.adresse, {'attr': {'placeholder': 'Adresse'}}) }}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(registrationForm.cp, {'attr': {'placeholder': 'Code postal'}}) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(registrationForm.ville, {'attr': {'placeholder': 'Ville'}}) }}
+                    </div>
+                </div>
+
+                <!-- Personnalisation de la case à cocher des conditions générales -->
+                <div class="form-check mb-3">
+                    <!-- On personnalise le libellé pour inclure un lien vers les conditions générales -->
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }} <!-- Classe Bootstrap pour personnaliser la case à cocher -->
+                    <label class="form-check-label" for="agreeTerms">
+                        J'accepte les <a href="#" target="_blank">conditions générales</a>.
+                    </label>
+                </div>
+
+                <!-- Bouton d'envoi -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Créer un compte</button>
+                </div>
+
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

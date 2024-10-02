@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{# Ce fichier étend le template de base nommé 'base.html.twig', ce qui permet d'utiliser la structure générale du site, comme le header et le footer. #}
+
+{% block title %}plat{% endblock %}
+{# Ce bloc définit le titre de la page. Ici, le titre sera "plat", qui sera injecté dans le template parent là où le bloc 'title' est utilisé. #}
+
+{% block body %}  
+{# Début du bloc 'body', où le contenu principal de la page sera inséré. #}
+
+    <div class="container-fluid g-0 row">
+    {# Conteneur Bootstrap en mode "fluid", qui occupe toute la largeur de la fenêtre. Le 'g-0' enlève les marges internes entre les colonnes (gutter), et 'row' indique qu'on travaille en grille. #}
+
+        <div class="row justify-content-center mt-3">
+        {# Une ligne Bootstrap qui centre les éléments horizontalement avec 'justify-content-center' et ajoute une marge supérieure (mt-3). #}
+
+            <h2 class="fs-1 col-12 ms-md-5">Nos plats :</h2>
+            {# Titre de la section, "Nos plats :". La classe 'fs-1' applique une grande taille de police, et 'col-12' assure que le titre occupe toute la largeur. 'ms-md-5' ajoute une marge à gauche sur les écrans de taille moyenne et plus. #}
+
+            <div class="row justify-content-center">
+            {# Une autre ligne pour centrer le contenu à l'intérieur, ce qui permet de bien positionner les cartes des plats. #}
+
+                {% for plats in plat %}
+                {# Boucle Twig qui parcourt la variable 'plat' et stocke chaque élément dans la variable 'plats'. #}
+
+                <div class="card col-md-4 flex-row mt-3 mx-md-5" style="width: 35rem">
+                {# Carte Bootstrap qui représente chaque plat. Elle occupe 4 colonnes sur les écrans moyens (col-md-4) et a une disposition en ligne grâce à 'flex-row'. 'mx-md-5' ajoute une marge horizontale sur les écrans de taille moyenne et plus. La largeur de la carte est définie à 35rem avec le style inline. #}
+                    
+                    <img src="{{ asset('img/food/' ~ plats.image) }}" class="rounded-3 img-fluid m-auto" alt="{{ plats.libelle }}'_food'" style="width: 10rem; height: fit-content;">
+                    {# Image du plat. Le chemin est généré dynamiquement à partir de 'plats.image'. La classe 'rounded-3' arrondit légèrement les bords. 'img-fluid' ajuste la taille de l'image automatiquement en fonction de la taille de l'écran, et 'm-auto' centre l'image verticalement et horizontalement. La largeur de l'image est fixée à 10rem avec une hauteur ajustée automatiquement grâce à 'height: fit-content'. #}
+
+                    <div class="card-body">
+                    {# Contenu textuel de la carte, qui contient le titre, la description et le prix du plat. #}
+
+                        <h5 class="card-title mt-md-4">{{ plats.libelle }}</h5>
+                        {# Titre du plat affiché dans la carte, avec une marge supérieure sur les écrans de taille moyenne (mt-md-4). #}
+
+                        <p class="card-text">{{ plats.description }}</p>
+                        {# Description du plat. Cette donnée est probablement extraite de la base de données et affichée dans la carte. #}
+
+                        <p class="card-text">{{ plats.prix}}</p>
+                        {# Prix du plat affiché dans la carte. #}
+
+                        <div class="d-flex justify-content-end">
+                        {# Conteneur flexbox pour positionner le bouton "Ajouter" dans la carte. 'justify-content-end' pousse le bouton vers la droite. #}
+
+                            <a href="{{ path('app_ajout_panier', {id: plats.id}) }}" class="d-none d-md-block btn btn-primary btn-lg position-absolute bottom-0 end-0">Ajouter</a>
+                            {# Lien qui permet d'ajouter le plat au panier. Ce lien est visible seulement sur les écrans de taille moyenne et plus ('d-none d-md-block'). Le bouton est positionné en bas à droite de la carte grâce à 'position-absolute bottom-0 end-0'. #}
+
+                            <a href="{{ path('app_ajout_panier', {id: plats.id}) }}" class="d-block d-md-none btn btn-primary btn-lg position-absolute bottom-0 start-0">Ajouter</a>
+                            {# Même lien "Ajouter" que ci-dessus, mais celui-ci est visible uniquement sur les petits écrans ('d-block d-md-none') et est positionné en bas à gauche de la carte ('bottom-0 start-0'). #}
+                        </div>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+                {# Fin de la boucle 'for'. Toutes les cartes des plats seront affichées à l'intérieur de cette boucle. #}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{# Fin du bloc 'body'. Le contenu de la page est entièrement défini à l'intérieur de ce bloc. #}

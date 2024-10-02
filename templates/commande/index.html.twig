@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+
+    {{ form_errors(form) }}
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }} {# Désactive la validation par défaut pour activer HTML5 #}
+    
+    <div class='container mt-4'>
+        <div class='row justify-content-center'>
+            <h1>Adresse de livraison</h1>
+
+            <div class="col-12 mb-3">
+                {{ form_row(form.nom, {'attr': {'required': 'required', 'aria-label': 'Nom complet'}}) }}
+            </div>
+        
+            <div class="col-12 mb-3">
+                {{ form_row(form.prenom, {'attr': {'required': 'required', 'aria-label': 'Prénom'}}) }}
+            </div>
+        
+            <div class="col-12 mb-3">
+                {{ form_row(form.telephone, {'attr': {'required': 'required', 'pattern': '\\d+', 'aria-label': 'Numéro de téléphone', 'placeholder': 'Entrez un numéro valide'}}) }}
+                {# Le pattern HTML5 pour s'assurer que seuls les chiffres sont acceptés #}
+            </div>
+        
+            <div class="col-12 mb-3">
+                {{ form_row(form.adresse, {'attr': {'required': 'required', 'aria-label': 'Adresse'}}) }}
+            </div>
+            
+            <div class="col-6 mb-3">
+                {{ form_row(form.cp, {'attr': {'required': 'required', 'pattern': '\\d{5}', 'aria-label': 'Code postal', 'placeholder': 'Ex: 75000'}}) }}
+                {# Pattern pour s'assurer que le code postal a bien 5 chiffres #}
+            </div>
+            
+            <div class="col-6 mb-3">
+                {{ form_row(form.ville, {'attr': {'required': 'required', 'aria-label': 'Ville'}}) }}
+            </div>
+        
+            <div class="col-6 mb-3">
+                {{ form_row(form.agreeTerms, {'attr': {'aria-label': 'J’accepte les termes et conditions'}}) }}
+            </div>
+
+            <div class="col-6 mb-3 d-flex justify-content-end">
+                {{ form_row(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center mb-4">Mentions légales</h1>
+        <p class="text-center">Les présentes mentions légales régissent l'utilisation de notre site.</p>
+
+        <!-- Section Identification -->
+        <div class="legal-section mb-4">
+            <h2><i class="bi bi-person icon"></i> Identification</h2>
+            <p><strong>Nom de l'entreprise :</strong> Tech Solutions SARL<br>
+               <strong>Adresse :</strong> 123 Avenue de l'Innovation, 75001 Paris, France<br>
+               <strong>Numéro de téléphone :</strong> +33 1 23 45 67 89<br>
+               <strong>Email :</strong> contact@techsolutions.com</p>
+        </div>
+
+        <!-- Section Responsabilité -->
+        <div class="legal-section mb-4">
+            <h2><i class="bi bi-exclamation-triangle icon"></i> Responsabilité</h2>
+            <p>Nous ne pouvons être tenus responsables des dommages résultant de l'utilisation de notre site.</p>
+        </div>
+
+        <!-- Section Propriété intellectuelle -->
+        <div class="legal-section mb-4">
+            <h2><i class="bi bi-lock icon"></i> Propriété intellectuelle</h2>
+            <p>Tous les contenus présents sur ce site sont protégés par le droit d'auteur.</p>
+        </div>
+
+        <!-- Section Cookies -->
+        <div class="legal-section mb-4">
+            <h2><i class="bi bi-cookie icon"></i> Cookies</h2>
+            <p>Ce site utilise des cookies pour améliorer votre expérience. Vous pouvez choisir de ne pas les accepter.</p>
+        </div>
+    </div>
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .legal-section {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #ffffff;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .icon {
+            margin-right: 8px;
+            color: #007bff;
+        }
+    </style>
+{% endblock %}

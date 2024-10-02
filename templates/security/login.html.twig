@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %} 
+{# Le template hérite de 'base.html.twig', qui contient la structure globale de la page (header, footer, etc.) #}
+
+{% block title %}Connexion{% endblock %} 
+{# Définition du titre de la page pour l'onglet du navigateur #}
+
+{% block body %} 
+{# Bloc 'body' où le contenu principal de la page de connexion est défini #}
+<form method="post" aria-labelledby="loginForm" class="d-flex flex-column align-items-center">
+    {# Formulaire de connexion avec la méthode POST. Utilisation des classes Bootstrap pour aligner les éléments au centre et 'aria-labelledby' pour l'accessibilité #}
+
+    {% if error %}
+        {# Si une erreur survient (échec de la connexion), elle est affichée dans une alerte Bootstrap #}
+        <div class="alert alert-danger" role="alert" aria-live="assertive">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    {% if app.user %}
+        {# Si l'utilisateur est déjà connecté, un message l'informe et lui offre un lien pour se déconnecter #}
+        <div class="mb-3 text-center">
+            Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>, 
+            <a href="{{ path('app_logout') }}" class="btn btn-sm btn-secondary ml-2">Déconnexion</a>
+        </div>
+    {% endif %}
+
+    <h1 id="loginForm" class="h3 mb-3 font-weight-normal text-center">Veuillez vous connecter</h1>
+    {# Titre principal du formulaire de connexion, centré avec les classes Bootstrap #}
+
+    <div class="form-group w-100" style="max-width: 400px;">
+        {# Champ de saisie de l'e-mail avec autocomplétion et validation. Utilisation de classes Bootstrap pour le style #}
+        <label for="inputEmail" class="form-label">Adresse e-mail</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" 
+               class="form-control" autocomplete="email" required autofocus 
+               aria-required="true" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre e-mail avec qui que ce soit.</small>
+        {# Message d'aide sous le champ e-mail pour rassurer l'utilisateur. Petit texte en gris #}
+    </div>
+
+    <div class="form-group w-100" style="max-width: 400px;">
+        {# Champ de saisie du mot de passe avec autocomplétion. L'utilisation du champ est obligatoire #}
+        <label for="inputPassword" class="form-label">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" 
+               autocomplete="current-password" required aria-required="true">
+        <small class="form-text text-muted"><a href="#">Mot de passe oublié ?</a></small>
+        {# Petit lien sous le champ de mot de passe pour la récupération de mot de passe #}
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    {# Jeton CSRF caché pour protéger le formulaire contre les attaques CSRF #}
+
+    <div class="form-group form-check w-100" style="max-width: 400px;">
+        {# Case à cocher "Se souvenir de moi" pour permettre à l'utilisateur de rester connecté #}
+        <input type="checkbox" class="form-check-input" name="_remember_me" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
+    </div>
+
+    <!-- Bouton Se connecter centré et stylé -->
+    <button class="btn btn-lg btn-primary btn-block mt-4" type="submit" 
+            style="width: 200px; background-color: #007bff; border-color: #007bff; border-radius: 25px;">
+        Se connecter
+    </button>
+    {# Bouton de soumission du formulaire avec des styles CSS intégrés pour l'apparence. Le bouton est large, arrondi, et centré #}
+</form>
+
+<!-- Styles CSS intégrés pour le formulaire et le bouton -->
+<style>
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+        /* Le formulaire est limité à une largeur maximale de 400px et centré horizontalement avec 'margin: 0 auto' */
+    }
+
+    button.btn {
+        transition: background-color 0.3s, transform 0.3s;
+        /* Application d'une transition douce pour les propriétés de la couleur de fond et la transformation lors du survol du bouton */
+    }
+
+    button.btn:hover {
+        background-color: #0056b3;
+        /* Lorsque le bouton est survolé, la couleur de fond devient un bleu plus foncé (#0056b3) */
+        transform: scale(1.05);
+        /* Lors du survol, le bouton s'agrandit légèrement, de 5% (effet visuel d'agrandissement) */
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        /* Chaque groupe de champs dans le formulaire a un espace de 15px en bas, créant un espacement entre les champs */
+    }
+</style>
+{% endblock %}

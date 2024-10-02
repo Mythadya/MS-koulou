@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Déclaration de l'encodage UTF-8 pour gérer correctement les caractères spéciaux -->
+        <meta charset="UTF-8">
+        
+        <!-- Bloc pour le titre, ce contenu peut être remplacé par d'autres templates -->
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        
+        <!-- Favicon (icône du site) -->
+        <link rel="shortcut icon" type="image/png" href="{{ asset('img/the_district_brand/favicon.png') }}"/>
+
+        <!-- Importation de Bootstrap 5 via CDN pour le style du site -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        
+        <!-- Importation des icônes de Bootstrap -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+
+        <!-- Bloc pour les fichiers CSS supplémentaires à ajouter dans les templates enfants -->
+        {% block stylesheets %}
+        {% endblock %}
+        
+        <!-- Bloc pour les fichiers JavaScript supplémentaires -->
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+
+    <!-- Début de la barre de navigation (navbar) -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <!-- Logo de la marque dans la navbar -->
+        <a class="navbar-brand" href="{{ path('app_index') }}">
+            <img src="{{ asset('img/the_district_brand/logo.png') }}" width="50" class="d-inline-block align-text-top" alt="navicon">
+        </a>
+        
+        <!-- Bouton pour mobile permettant d'afficher/cacher le menu -->
+        <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu de navigation avec des liens vers différentes pages du site -->
+        <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+            <div class='justify-content-center'>
+                <ul class="navbar-nav">
+                    
+                    <!-- Lien vers l'accueil -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_index' ? 'active' : ''}}" href="{{ path('app_index') }}" title="Accueil">Accueil</a>
+                    </li>
+
+                    <!-- Lien vers la page catégorie -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_category' ? 'active' : ''}}" href="{{ path('app_category') }}" title="Categorie">Categorie</a>
+                    </li>
+
+                    <!-- Lien vers la page plat -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_dish' ? 'active' : ''}}" href="{{ path('app_dish') }}" title="Plat">Plat</a>
+                    </li>
+
+                    <!-- Lien vers la page contact -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_contact' ? 'active' : ''}}" href="{{ path('app_contact') }}" title="Contact">Contact</a>
+                    </li>
+
+                    <!-- Affichage conditionnel des options si l'utilisateur est connecté -->
+                    {% if app.user %}
+                    
+                    <!-- Lien vers la page utilisateur (affiche le nom de l'utilisateur) -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_utilisateur' ? 'active' : ''}}" href="{{ path('app_utilisateur', {nom: app.user.nom, prenom: app.user.prenom}) }}" title="Profil">{{ app.user.nom }}</a>
+                    </li>
+
+                    <!-- Lien de déconnexion -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_logout' ? 'active' : ''}}" href="{{ path('app_logout') }}" title="Deconnexion">Deconnexion</a>
+                    </li>
+
+                    {% else %}
+                    
+                    <!-- Si l'utilisateur n'est pas connecté, affichage des liens de connexion et d'inscription -->
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_login' ? 'active' : ''}}" href="{{ path('app_login') }}" title="Connexion">Connexion</a>
+                    </li>
+
+                    <li class="nav-item px-5">
+                        <a class="textnav nav-link {{ app.current_route == 'app_register' ? 'active' : ''}}" href="{{ path('app_register') }}" title="Inscription">Nouveau utilisateur</a>
+                    </li>
+
+                    {% endif %}
+
+                    <!-- Lien vers le panier (bouton vert avec une icône panier) -->
+                    <li class="navbar-brand position-absolute end-0">
+                        <a href="{{ path('app_panier') }}" class="btn btn-success">
+                            <i class="bi bi-cart"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section contenant une vidéo en bannière -->
+    <div id="parent">
+        <div id="banniere" class="row g-0">
+            <video id="video" class="col-12" src="{{ asset('img/video/267-135875613_small.mp4') }}" style="width: 100vmax; height: 25vmax;" playsinline autoplay loop muted></video>
+        </div>
+
+        <!-- Formulaire de recherche (actuellement caché sur mobile grâce à la classe d-none d-sm-flex) -->
+        <div id="recherche" class="d-none d-sm-flex">
+            <form class="col-12" action="script/script_recherche.php" role="search">
+                <input class="form-control me-2" type="search" name="recherche" placeholder="Recherche..." aria-label="Search">
+            </form>
+        </div>
+    </div>
+
+<body>
+    <!-- Bloc pour le contenu principal des pages, sera rempli par les templates enfants -->
+    {% block body %}{% endblock %}
+
+    <!-- Pied de page contenant des liens vers les réseaux sociaux et les pages légales -->
+    <footer class="p-0 g-0">
+        <nav id="navbot" class="navbar navbar-expand bg-dark navbar-dark mt-3 rounded-top rounded-bottom container-fluid">
+            <div class="collapse navbar-collapse justify-content-center row" id="collapsibleNavbar2">
+                <ul class="navbar-nav col-12 justify-content-center mx-xl-2">
+
+                    <!-- Liens vers les pages sociales avec icônes correspondantes -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" title="Facebook">
+                            <img src="{{ asset('img/social_media/icons8-facebook-48.png') }}" class="img-fluid align-text-top" alt="navfb">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Instagram">
+                            <img src="{{ asset('img/social_media/icons8-instagram-48.png') }}" class="img-fluid d-inline-block align-text-top" alt="navinsta">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="TikTok">
+                            <img src="{{ asset('img/social_media/icons8-tiktok-48.png') }}" class="img-fluid d-inline-block align-text-top" alt="navtt">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Twitter">
+                            <img src="{{ asset('img/social_media/icons8-twitter-48.png') }}" class="img-fluid d-inline-block align-text-top" alt="navx">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="YouTube">
+                            <img src="{{ asset('img/social_media/icons8-youtube-48.png') }}" class="img-fluid d-inline-block align-text-top" alt="navyt">
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- Liens vers les pages mentions légales et politique de confidentialité -->
+                <ul class="navbar-nav col-12 justify-content-center mx-xl-2 mt-2">
+
+                    <!-- Lien vers la politique de confidentialité avec icône -->
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="{{ path('politique_de_confidentialite') }}" title="Politique de confidentialité">
+                            <img src="{{ asset('img/social_media/icons8-politique-de-confidentialité-50.png') }}" width="30" alt="Politique de confidentialité"> Politique de confidentialité
+                        </a>
+                    </li>
+
+                    <!-- Lien vers les mentions légales avec icône -->
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="{{ path('mentions_legales') }}" title="Mentions légales">
+                            <img src="{{ asset('img/social_media/icons8-mention-legales-50.png') }}" width="30" alt="Mentions légales"> Mentions légales
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </nav>
+    </footer>
+
+</body>
+
+<!-- Importation de Bootstrap JS pour le support des fonctionnalités dynamiques (comme le menu déroulant) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</html>
