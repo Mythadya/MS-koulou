@@ -1,51 +1,52 @@
 {% extends 'base.html.twig' %}
-{# Ce fichier étend le template de base nommé 'base.html.twig', ce qui permet de réutiliser la structure générale du site, comme l'en-tête, le pied de page, etc. #}
 
 {% block title %}Categorie{% endblock %}
-{# Bloc 'title' défini pour afficher "Categorie" comme titre de la page, qui sera inséré dans le template parent si ce bloc est utilisé #}
 
 {% block body %}
-{# Début du bloc 'body', qui contiendra le contenu principal de cette page #}
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1 class="fs-1">Nos Categories :</h1>
+            {# Titre centré avec une marge inférieure (mb-4) et une taille de police large (fs-1) pour le texte #}
+        </div>
+    </div>
 
-<div class="container g-0">
-    {# Conteneur Bootstrap pour gérer la mise en page de manière fluide avec une marge entre les colonnes (gutter) définie à 0 (g-0) #}
-            
-    <div class="fs-1 col-12">Nos Categories :</div>
-    {# Titre affichant "Nos Categories", en utilisant la classe Bootstrap 'fs-1' pour un grand texte et 'col-12' pour qu'il occupe toute la largeur #}
-                
     <div class="row justify-content-center">
-        {# Ligne Bootstrap qui organise les éléments dans une grille et centre le contenu horizontalement grâce à 'justify-content-center' #}
+        {# Début d'une rangée Bootstrap qui centre les colonnes #}
         
         {% for categorie in category %}
-        {# Début de la boucle 'for' qui parcourt chaque élément de la variable 'category' et l'assigne à la variable 'categorie' #}
+        <div class="col-12 col-sm-6 col-md-4 mt-3 d-flex">
+            {# Chaque catégorie est contenue dans une colonne responsive : 
+                - col-12 : occupe 100% de la largeur sur mobile,
+                - col-sm-6 : occupe 50% de la largeur sur les petits écrans,
+                - col-md-4 : occupe 33% sur les écrans moyens.
+               La classe mt-3 ajoute une marge supérieure, et d-flex permet à la carte de s'adapter à la hauteur. #}
+            
+            <div class="card w-100">
+                {# La carte occupe toute la largeur disponible avec w-100 #}
+                <a class="text-decoration-none" href="{{ path('app_dishincat', {categorie_id: categorie.id}) }}">
+                    {# Le lien autour de la carte est sans soulignement grâce à text-decoration-none #}
 
-        <div class="col-12 col-sm-6 col-md-4 mt-3">
-            {# Colonne réactive : elle occupe toute la largeur sur mobile (col-12), la moitié sur petit écran (col-sm-6) et un tiers sur écran moyen (col-md-4). 'mt-3' ajoute une marge supérieure #}
+                    <img src="{{ asset('img/category/' ~ categorie.image) }}" 
+                         class="card-img-top imagecat" 
+                         alt="{{ categorie.libelle }}" 
+                         style="max-height: 200px; width: 100%; object-fit: cover;">
+                    {# L'image est ajustée pour s'adapter correctement :
+                        - max-height: 200px limite la hauteur,
+                        - width: 100% assure que l'image prend toute la largeur de la carte,
+                        - object-fit: cover permet de couper l'image de manière esthétique sans la déformer. #}
 
-            <div class="card col-12 col-sm-6 col-md-4 mt-3 mx-auto row">
-                {# Carte Bootstrap pour chaque catégorie. Elle a une mise en page similaire à la colonne et est centrée horizontalement avec 'mx-auto'. #}
-                <a class="link-body-emphasis link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover justify-content-center" href="{{ path('app_dishincat', {categorie_id: categorie.id}) }}">
-                    {# Lien cliquable qui mène à la route 'app_dishincat', passant l'ID de la catégorie en paramètre. Plusieurs classes de Bootstrap sont utilisées pour styliser le lien. #}
-
-                    <img src="{{ asset('img/category/' ~ categorie.image) }}" class="card-img-top imagecat" alt="{{ categorie.libelle }}">
-                    {# Image de la catégorie, dont le chemin est généré dynamiquement à partir de la variable 'categorie.image'. La classe 'card-img-top' est utilisée pour positionner l'image en haut de la carte. 'alt' est là pour l'accessibilité. #}
-
-                    <div class="card-body">
-                        {# Corps de la carte, où le texte de la catégorie est affiché #}
-
+                    <div class="card-body text-center">
+                        {# Corps de la carte avec le texte centré #}
                         <h5 class="card-title">{{ categorie.libelle | upper }}</h5>
-                        {# Titre de la carte, qui affiche le libellé de la catégorie en majuscules (grâce au filtre 'upper' de Twig) #}
-
+                        {# Le titre de la carte affiche le libellé de la catégorie en majuscules #}
                     </div>
                 </a>
             </div>
         </div>
-
         {% endfor %}
-        {# Fin de la boucle 'for'. Toutes les catégories seront affichées sous forme de cartes. #}
-
+        {# Fin de la boucle qui affiche toutes les catégories sous forme de cartes #}
+        
     </div>
 </div>
-
 {% endblock %}
-{# Fin du bloc 'body'. Le contenu principal de la page est terminé ici. #}
