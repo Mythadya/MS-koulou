@@ -15,39 +15,45 @@ use Symfony\Component\Mime\Email;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request,EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
+        // Création de l'entité Contact et du formulaire
         $contact = new Contact();
         $form = $this->createForm(ContactFormType::class, $contact);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
-            
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Enregistrement des données en base de données
             $em->persist($contact);
             $em->flush();
 
-        return $this->redirectToRoute('app_index');
-    } else {
-        return $this->render('contact/index.html.twig',[
-            'form' => $form
+            // Création de l'email
+            $email = (new Email())
+                ->from($contact->getEmail())  // L'adresse e-mail saisie par l'utilisateur
+                ->to('admin@votre-site.fr')   // L'adresse de réception
+                ->subject('Nouveau message de contact')
+                ->text(sprintf(
+                    "Nom: %s\nPrénom: %s\nEmail: %s\nTéléphone: %s\nMessage: %s",
+                    $contact->getNom(),
+                    $contact->getPrenom(),
+                    $contact->getEmail(),
+                    $contact->getTelephone(),
+                    $contact->getDemande()
+                ));
+
+            // Envoi de l'e-mail
+            $mailer->send($email);
+
+            // Message flash pour informer l'utilisateur que le message a été envoyé
+            $this->addFlash('success', 'Votre message a été envoyé avec succès.');
+
+            // Redirection après soumission réussie
+            return $this->redirectToRoute('app_contact');
+        }
+
+        // Rendu du formulaire si non soumis ou non valide
+        return $this->render('contact/index.html.twig', [
+            'form' => $form->createView(),
         ]);
-    }
-}
-    #[Route('/email')]
-    public function sendEmail(MailerInterface $mailer): Response
-    {
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to('you@example.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
-
-        $mailer->send($email);
-
-        return $this->redirectToRoute('app_index');
     }
 }

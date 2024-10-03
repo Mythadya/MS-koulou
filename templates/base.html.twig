@@ -116,6 +116,25 @@
     </div>
 
 <body>
+
+
+    <!-- Section des messages flash -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    <!-- Fin de la section des messages flash -->
+
+
     <!-- Bloc pour le contenu principal des pages, sera rempli par les templates enfants -->
     {% block body %}{% endblock %}
 
