@@ -3,75 +3,86 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-<div class="container">
-<h1 class="my-2">Detail du compte</h1>
-    <div class="row justify-content-start">
-        <h2>mes informations personnel</h2>
-        <div class="card text-bg-primary my-3" >
-            <div class="card-header">adresse</div>
-            <div class="card-body">
-                <h5 class="card-title">{{ user.Nom }} {{ user.prenom | upper}}</h5>
-                <p class="card-text">{{ user.email }}</p>
-                <p class="card-text">{{ user.telephone }}</p>
-                <p class="card-text">{{ user.adresse }}</p>
-                <p class="card-text">{{ user.ville }}</p>
-                <p class="card-text">{{ user.cp }}</p>
-                 <a class="link-body-emphasis link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover justify-content-center" href="{{ path ('app_editprofil', {nom: app.user.nom,prenom: app.user.prenom}) }}">
-                <button class="btn btn-primary">Modifier</button></a>
+<div class="container"> <!-- Container principal pour centrer le contenu -->
+    <h1 class="my-2">Détail du compte</h1>
+    
+    <div class="row"> <!-- Row pour structurer la grille de Bootstrap -->
+        <h2 class="col-12">Mes informations personnelles</h2> <!-- col-12 pour occuper toute la largeur -->
+        
+        <div class="col-12 col-md-6 col-lg-4"> <!-- Responsiveness: colonne entière sur petits écrans, demi-largeur sur tablettes, un tiers sur desktop -->
+            <div class="card text-bg-primary my-3"> <!-- Carte Bootstrap pour afficher les informations utilisateur -->
+                <div class="card-header">Adresse</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.Nom }} {{ user.prenom | upper }}</h5> <!-- Affichage du nom et prénom en majuscule -->
+                    <p class="card-text">{{ user.email }}</p> <!-- Email de l'utilisateur -->
+                    <p class="card-text">{{ user.telephone }}</p> <!-- Téléphone de l'utilisateur -->
+                    <p class="card-text">{{ user.adresse }}</p> <!-- Adresse de l'utilisateur -->
+                    <p class="card-text">{{ user.ville }}</p> <!-- Ville de l'utilisateur -->
+                    <p class="card-text">{{ user.cp }}</p> <!-- Code postal de l'utilisateur -->
+                    <!-- Lien pour modifier le profil, redirige vers la route avec les paramètres nom et prénom -->
+                    <a class="link-body-emphasis link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover justify-content-center" href="{{ path('app_editprofil', {nom: app.user.nom, prenom: app.user.prenom}) }}">
+                        <button class="btn btn-primary">Modifier</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="row"> <!-- Nouvelle ligne pour la section des commandes -->
+        <h2 class="col-12">Mes commandes</h2> <!-- Titre de la section commandes -->
 
-<div class="row">
-<h2>Mes commandes</h2>
-
-<table class="table table-striped-columns">
-    <thead>
-        <tr>
-            <th class='text-center'>date de la commande</th>
-            <th class='text-center'>etat</th>
-            <th class='text-center'>detail commande</th>
-            <th class='text-center'>total</th>
-        </tr>
-    </thead>
-    <tbody>
-            {% for commande in commandes  %}
-                <tr>
-                    <th class='text-center align-middle'>{{ commande.DateCommande | date("d/m/Y") }}</th>
-
-                    <th class='text-center align-middle'>{% if (commande.etat == 0) %}enregistrée/payée {% elseif (commande.etat == 1) %} en préparation {% elseif (commande.etat == 2) %} en cours de livraison {% elseif (commande.etat == 3) %} livrée {% endif %} </th>
-
-                    <th class='text-start'>
+        <!-- Table responsive pour permettre le défilement horizontal sur les petits écrans -->
+        <div class="table-responsive"> 
+            <table class="table table-striped-columns"> <!-- Table avec colonnes alternant les couleurs -->
+                <thead>
+                    <tr>
+                        <th class="text-center">Date de la commande</th> <!-- Centrer le texte dans cette colonne -->
+                        <th class="text-center">État</th> <!-- Centrer le texte dans cette colonne -->
+                        <th class="text-center">Détail commande</th> <!-- Centrer le texte dans cette colonne -->
+                        <th class="text-center">Total</th> <!-- Centrer le texte dans cette colonne -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commande in commandes %} <!-- Boucle sur chaque commande de l'utilisateur -->
+                        <tr>
+                            <th class="text-center align-middle">{{ commande.DateCommande | date("d/m/Y") }}</th> <!-- Affichage de la date de la commande, formatée -->
+                            <th class="text-center align-middle">
+                                {% if commande.etat == 0 %} enregistrée/payée
+                                {% elseif commande.etat == 1 %} en préparation
+                                {% elseif commande.etat == 2 %} en cours de livraison
+                                {% elseif commande.etat == 3 %} livrée
+                                {% endif %}
+                            </th>
+                            <!-- Colonne détaillant les plats de la commande -->
+                            <th class="text-start">
+                                <!-- Table responsive pour les détails de chaque commande -->
+                                <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>Nom</th>
-                                                <th>Prix</th>
-                                                <th>quantite</th>
+                                                <th>Nom</th> <!-- Nom du plat commandé -->
+                                                <th>Prix</th> <!-- Prix du plat -->
+                                                <th>Quantité</th> <!-- Quantité commandée -->
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for detail in commande.details  %}
-                                               
+                                            {% for detail in commande.details %} <!-- Boucle sur chaque détail (plat) de la commande -->
                                                 <tr>
-                                                    <td>{{ detail.plats.libelle }}</td>
-                                                    <td>{{ detail.plats.prix }}</td>
-                                                    <td>{{ detail.quantite}}</td>
+                                                    <td>{{ detail.plats.libelle }}</td> <!-- Affichage du nom du plat -->
+                                                    <td>{{ detail.plats.prix }}</td> <!-- Affichage du prix du plat -->
+                                                    <td>{{ detail.quantite }}</td> <!-- Affichage de la quantité commandée -->
                                                 </tr>
-
                                             {% endfor %}
                                         </tbody>
-                                    </table></th>
-
-                    <th class='text-center align-middle'>{{ commande.total }}</th>
-                    
-                </tr>
-            {% endfor %}
-    </tbody>
-</table>
-
-</div>
-</div>
-</div>
+                                    </table>
+                                </div>
+                            </th>
+                            <th class="text-center align-middle">{{ commande.total }}</th> <!-- Affichage du total de la commande -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div> <!-- Fermeture de la div table-responsive -->
+    </div> <!-- Fermeture de la row pour les commandes -->
+</div> <!-- Fermeture du container principal -->
 {% endblock %}

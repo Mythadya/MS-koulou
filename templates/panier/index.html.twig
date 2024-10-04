@@ -1,134 +1,122 @@
-{% extends 'base.html.twig' %} {# Le template hérite de 'base.html.twig', qui contient la structure globale de la page (header, footer, etc.) #}
+{% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %} {# Le titre de la page dans l'onglet du navigateur est défini ici : "Panier" #}
+{% block title %}Panier{% endblock %}
 
-{% block body %} {# Début du bloc body, où le contenu principal de la page est défini #}
+{% block body %}
 
-<div class="container-fluid"> {# Conteneur fluide Bootstrap pour occuper toute la largeur de l'écran #}
+<div class="container-fluid"> {# Conteneur fluide pour occuper toute la largeur de l'écran #}
 
     <section class="bg-light p-3">
-        <h1>Votre Panier</h1> {# Section pour le titre principal de la page : "Votre Panier" #}
+        <h1>Votre Panier</h1> {# Section pour le titre principal de la page #}
     </section>
 
-    <div class="row"> {# Structure en grille Bootstrap avec une ligne contenant deux colonnes #}
+    <div class="row"> {# Structure en grille Bootstrap pour gérer les colonnes selon la taille de l'écran #}
+        
+        <div class="col-12 col-md-9"> {# La colonne principale prend toute la largeur sur mobile (col-12) et 9/12 sur les écrans moyens et plus (col-md-9) #}
+            
+            <div class="table-responsive"> {# Ajout de la classe table-responsive pour permettre à la table d'être défilable horizontalement sur petits écrans #}
+                <table class="table table-hover"> {# Table Bootstrap avec l'effet 'hover' pour les lignes #}
 
-        <div class="col-9"> {# Colonne principale prenant 9/12 de la largeur de l'écran #}
+                    <thead> {# En-tête de la table #}
+                        <tr>
+                            <th class="text-center"></th> {# Colonne pour l'image du produit #}
+                            <th class="text-center">Produit</th> {# Nom du produit #}
+                            <th class="text-center">Prix</th> {# Prix unitaire du produit #}
+                            <th class="text-center">Quantité</th> {# Quantité dans le panier #}
+                            <th class="text-center">Total</th> {# Total pour ce produit (prix * quantité) #}
+                            <th class="text-center"></th> {# Colonne pour les boutons d'action (ajouter, retirer, supprimer) #}
+                        </tr>
+                    </thead>
 
-            <table class="table table-hover"> {# Table Bootstrap avec effet 'hover' sur les lignes #}
-
-                <thead> {# En-tête de la table #}
-                    <tr>
-                        <th class="text-center"></th> {# Colonne vide pour l'image du produit #}
-                        <th class="text-center">Produit</th> {# Nom du produit #}
-                        <th class="text-center">Prix</th> {# Prix unitaire du produit #}
-                        <th class="text-center">Quantité</th> {# Quantité du produit dans le panier #}
-                        <th class="text-center">Total</th> {# Total (prix * quantité) pour chaque produit #}
-                        <th class="text-center"></th> {# Colonne vide pour les boutons d'actions (ajouter, retirer, supprimer) #}
-                    </tr>
-                </thead>
-
-                <tbody> {# Corps de la table où les lignes des produits seront affichées #}
-
-                    {% for element in dataPanier %} {# Boucle sur les éléments du panier (dataPanier) #}
-
+                    <tbody> {# Corps de la table avec les lignes pour chaque produit #}
+                        {% for element in dataPanier %}
                         <tr>
                             <td class="text-center align-middle">
-                                <img src="{{ asset ('img/food/' ~ element.plat.image) }}" alt="{{ element.plat.libelle }}-food" class="img-fluid imagepanier"> {# Image du produit #}
+                                <img src="{{ asset ('img/food/' ~ element.plat.image) }}" alt="{{ element.plat.libelle }}-food" class="img-fluid imagepanier"> {# Image fluide pour qu'elle s'adapte à la taille de la colonne #}
                             </td>
                             <td class="text-center align-middle">{{ element.plat.libelle }}</td> {# Nom du produit #}
                             <td class="text-center align-middle">{{ element.plat.prix }} €</td> {# Prix unitaire #}
-                            <td class="text-center align-middle">{{ element.quantite }}</td> {# Quantité de l'article #}
-                            <td class="text-center align-middle">{{ element.plat.prix * element.quantite }} €</td> {# Prix total pour cet article (prix * quantité) #}
-                            <td class="text-center align-middle">
-                                {# Boutons pour gérer les quantités et supprimer les produits du panier #}
-                                <a href="{{ path("app_ajout_panier", {id: element.plat.id}) }}" class="btn btn-success">
-                                    <i class="bi bi-cart-plus"></i> {# Bouton pour augmenter la quantité d'un produit #}
+                            <td class="text-center align-middle">{{ element.quantite }}</td> {# Quantité du produit #}
+                            <td class="text-center align-middle">{{ element.plat.prix * element.quantite }} €</td> {# Total pour cet article #}
+                            <td class="text-center align-middle"> {# Boutons d'action pour gérer la quantité et la suppression #}
+                                <a href="{{ path('app_ajout_panier', {id: element.plat.id}) }}" class="btn btn-success">
+                                    <i class="bi bi-cart-plus"></i>
                                 </a>
-                            
-                                <a href="{{ path("app_enlever_panier", {id: element.plat.id}) }}" class="btn btn-warning mx-3">
-                                    <i class="bi bi-cart-dash"></i> {# Bouton pour diminuer la quantité d'un produit #}
+                                <a href="{{ path('app_enlever_panier', {id: element.plat.id}) }}" class="btn btn-warning mx-3">
+                                    <i class="bi bi-cart-dash"></i>
                                 </a>
-
-                                <a href="{{ path("app_supprimer_panier", {id: element.plat.id}) }}" class="btn btn-danger">
-                                    <i class="bi bi-cart-x"></i> {# Bouton pour supprimer complètement un produit du panier #}
+                                <a href="{{ path('app_supprimer_panier', {id: element.plat.id}) }}" class="btn btn-danger">
+                                    <i class="bi bi-cart-x"></i>
                                 </a>
-
                             </td>
                         </tr>
-                        
-                    {% else %} {# Si le panier est vide #}
-
+                        {% else %}
                         <tr>
-                            <td colspan="6" class="text-center">Votre Panier est vide</td> {# Message informant que le panier est vide #}
+                            <td colspan="6" class="text-center">Votre Panier est vide</td> {# Message si le panier est vide #}
                         </tr>
-                        
-                    {% endfor %}
+                        {% endfor %}
+                    </tbody>
 
-                </tbody>
+                    <tfoot class="d-md-none"> {# Pied de la table, visible uniquement sur petits écrans grâce à d-md-none #}
+                        <tr>
+                            <td colspan="4">Total :</td>
+                            <td class="text-end">{{ total }} €</td> {# Total du panier pour petits écrans #}
+                            <td class="text-end">
+                                <a href="{{ path('app_supprimer_panier_all') }}" class="btn btn-danger">
+                                    <i class="bi bi-cart-x"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tfoot>
 
-                <tfoot class="d-md-none"> {# Pied de la table, uniquement visible sur petits écrans (mobiles) #}
-                    <tr>
-                        <td colspan="4">Total :</td>
-                        <td class="text-end">{{ total }} €</td> {# Total du panier (tous les produits) #}
-                        <td class="text-end">
-                            <a href="{{ path("app_supprimer_panier_all") }}" class="btn btn-danger">
-                                <i class="bi bi-cart-x"></i> {# Bouton pour vider complètement le panier #}
-                            </a>
-                        </td>
-                    </tr>
-                </tfoot> 
+                </table>
+            </div> {# Fin de la table-responsive #}
+        </div> {# Fin de la colonne principale #}
 
-            </table>
-
-        </div>
-
-        <div class="col-2 p-0"> {# Deuxième colonne prenant 2/12 de la largeur, affichant le récapitulatif du panier #}
-            <table class="bg-light col-1 table"> {# Tableau pour le récapitulatif du panier, disposé verticalement #}
+        <div class="col-12 col-md-3 p-0 mt-4 mt-md-0"> {# Deuxième colonne qui prend 100% sur mobile (col-12) et 3/12 sur écrans moyens (col-md-3) #}
+            <table class="table bg-light"> {# Tableau récapitulatif du panier, avec fond clair #}
                 <thead>
                     <tr>
-                        <th class="text-start" scope="col">Total :</th> {# En-tête avec le texte "Total" #}
+                        <th class="text-start">Total :</th> {# Colonne pour le texte 'Total' #}
                         <th></th>
-                        <th class="text-end">
-                            <a href="{{ path("app_supprimer_panier_all") }}" class="btn btn-danger">
-                                <i class="bi bi-cart-x"></i> {# Bouton pour vider le panier #}
+                        <th class="text-end"> {# Bouton pour vider le panier #}
+                            <a href="{{ path('app_supprimer_panier_all') }}" class="btn btn-danger">
+                                <i class="bi bi-cart-x"></i>
                             </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for element in dataPanier %} {# Boucle sur les éléments du panier #}
-
+                    {% for element in dataPanier %}
                     <tr>
                         <td class="text-center align-middle">{{ element.plat.prix }} €</td> {# Prix du produit #}
-                        <td class="text-center align-middle"> x </td> {# Multiplication pour indiquer la quantité #}
+                        <td class="text-center align-middle"> x </td> {# Multiplication pour la quantité #}
                         <td class="text-center align-middle">{{ element.quantite }}</td> {# Quantité du produit #}
                     </tr>
-
-                    {% else %} {# Si le panier est vide #}
-
+                    {% else %}
                     <tr>
-                        <td colspan="5" class="text-center">Votre Panier est vide</td> {# Message indiquant que le panier est vide #}
+                        <td colspan="5" class="text-center">Votre Panier est vide</td> {# Message si le panier est vide #}
                     </tr>
-                        
                     {% endfor %}
 
                     <tr>
-                        <td colspan="3" class="text-center">Sous-total ({{ dataPanier | length }} article{% if dataPanier | length > 1 %}s{% endif %}) : {{ total }}.00 €</td> {# Récapitulatif du sous-total avec la quantité totale d'articles #}
+                        <td colspan="3" class="text-center"> {# Sous-total du panier avec le nombre d'articles #}
+                            Sous-total ({{ dataPanier | length }} article{% if dataPanier | length > 1 %}s{% endif %}) : {{ total }}.00 €
+                        </td>
                     </tr>
 
                     <tr>
                         <td colspan="3" class="text-end">
-                            <a class="link-body-emphasis link-offset-2 link-underline-opacity-0 link-underline-opacity-75-hover justify-content-center" href="{{ path('app_commande') }}">
-                                <button class="btn btn-primary">Commander</button> {# Bouton pour passer à la commande #}
+                            <a href="{{ path('app_commande') }}"> {# Lien vers la page de commande #}
+                                <button class="btn btn-primary">Commander</button> {# Bouton Commander #}
                             </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div> {# Fin de la deuxième colonne #}
 
-    </div>
+    </div> {# Fin de la rangée #}
+</div> {# Fin du container-fluid #}
 
-</div>
-
-{% endblock %} {# Fin du bloc 'body' #}
+{% endblock %}
