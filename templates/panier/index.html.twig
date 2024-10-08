@@ -22,12 +22,12 @@
                 <table class="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th class="text-center">Image</th> {# Ajout du titre 'Image' pour clarifier #}
+                            <th class="text-center">Image</th>
                             <th class="text-center">Produit</th>
                             <th class="text-center">Prix</th>
                             <th class="text-center">Quantité</th>
                             <th class="text-center">Total</th>
-                            <th class="text-center">Actions</th> {# Colonne pour les boutons d'action #}
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,30 +35,30 @@
                         {% for element in dataPanier %}
                         <tr>
                             <td class="text-center">
-                                {# Image du produit avec un alt plus descriptif pour l'accessibilité #}
-                                <img src="{{ asset('img/food/' ~ element.plat.image) }}" alt="Image de {{ element.plat.libelle }}" class="img-fluid imagepanier">
+                                {# Image du produit avec échappement des données pour éviter XSS #}
+                                <img src="{{ asset('img/food/' ~ element.plat.image | e) }}" alt="Image de {{ element.plat.libelle | e }}" class="img-fluid imagepanier">
                             </td>
-                            <td class="text-center">{{ element.plat.libelle }}</td> {# Nom du produit #}
-                            <td class="text-center">{{ element.plat.prix }} €</td> {# Prix du produit #}
+                            <td class="text-center">{{ element.plat.libelle | e }}</td> {# Nom du produit avec échappement #}
+                            <td class="text-center">{{ element.plat.prix | e }} €</td> {# Prix du produit avec échappement #}
                             <td class="text-center">
                                 {# Gestion de la quantité avec boutons pour augmenter ou réduire #}
                                 <div class="d-flex justify-content-center align-items-center">
-                                    {# Bouton pour enlever un produit #}
-                                    <a href="{{ path('app_enlever_panier', {id: element.plat.id}) }}" class="btn btn-warning btn-sm me-2" aria-label="Enlever un {{ element.plat.libelle }}">
-                                        <i class="bi bi-cart-dash"></i> {# Icone pour enlever un produit #}
+                                    {# Bouton pour enlever un produit avec protection CSRF #}
+                                    <a href="{{ path('app_enlever_panier', {id: element.plat.id, '_token': csrf_token('enlever_item_' ~ element.plat.id)}) }}" class="btn btn-warning btn-sm me-2" aria-label="Enlever un {{ element.plat.libelle | e }}">
+                                        <i class="bi bi-cart-dash"></i>
                                     </a>
-                                    <span>{{ element.quantite }}</span> {# Affichage de la quantité #}
-                                    {# Bouton pour ajouter un produit #}
-                                    <a href="{{ path('app_ajout_panier', {id: element.plat.id}) }}" class="btn btn-success btn-sm ms-2" aria-label="Ajouter un {{ element.plat.libelle }}">
-                                        <i class="bi bi-cart-plus"></i> {# Icone pour ajouter un produit #}
+                                    <span>{{ element.quantite }}</span>
+                                    {# Bouton pour ajouter un produit avec protection CSRF #}
+                                    <a href="{{ path('app_ajout_panier', {id: element.plat.id, '_token': csrf_token('ajout_item_' ~ element.plat.id)}) }}" class="btn btn-success btn-sm ms-2" aria-label="Ajouter un {{ element.plat.libelle | e }}">
+                                        <i class="bi bi-cart-plus"></i>
                                     </a>
                                 </div>
                             </td>
-                            <td class="text-center">{{ element.plat.prix * element.quantite }} €</td> {# Calcul du total par produit #}
+                            <td class="text-center">{{ element.plat.prix * element.quantite | e }} €</td> {# Calcul du total par produit avec échappement #}
                             <td class="text-center">
-                                {# Bouton pour supprimer un produit du panier #}
-                                <a href="{{ path('app_supprimer_panier', {id: element.plat.id}) }}" class="btn btn-danger btn-sm" aria-label="Supprimer {{ element.plat.libelle }}">
-                                    <i class="bi bi-cart-x"></i> {# Icone de suppression #}
+                                {# Bouton pour supprimer un produit avec protection CSRF #}
+                                <a href="{{ path('app_supprimer_panier', {id: element.plat.id, '_token': csrf_token('supprimer_item_' ~ element.plat.id)}) }}" class="btn btn-danger btn-sm" aria-label="Supprimer {{ element.plat.libelle | e }}">
+                                    <i class="bi bi-cart-x"></i>
                                 </a>
                             </td>
                         </tr>
@@ -67,12 +67,12 @@
                     {# Footer pour les petits écrans uniquement (d-md-none) #}
                     <tfoot class="d-md-none">
                         <tr>
-                            <td colspan="4" class="fw-bold">Total :</td> {# Affichage du total #}
-                            <td class="text-end">{{ total }} €</td>
+                            <td colspan="4" class="fw-bold">Total :</td>
+                            <td class="text-end">{{ total | e }} €</td> {# Total général du panier avec échappement #}
                             <td class="text-end">
-                                {# Bouton pour vider tout le panier #}
-                                <a href="{{ path('app_supprimer_panier_all') }}" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-cart-x"></i> {# Icone de suppression totale #}
+                                {# Bouton pour vider tout le panier avec protection CSRF #}
+                                <a href="{{ path('app_supprimer_panier_all', {'_token': csrf_token('supprimer_all')}) }}" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-cart-x"></i>
                                 </a>
                             </td>
                         </tr>
@@ -89,14 +89,14 @@
                     {# Affichage de chaque produit avec la quantité et le prix #}
                     {% for element in dataPanier %}
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>{{ element.plat.libelle }} (x{{ element.quantite }})</span>
-                        <strong>{{ element.plat.prix * element.quantite }} €</strong>
+                        <span>{{ element.plat.libelle | e }} (x{{ element.quantite }})</span>
+                        <strong>{{ element.plat.prix * element.quantite | e }} €</strong>
                     </li>
                     {% endfor %}
                     {# Ligne pour le total du panier #}
                     <li class="list-group-item d-flex justify-content-between">
                         <strong>Total</strong>
-                        <strong>{{ total }} €</strong>
+                        <strong>{{ total | e }} €</strong>
                     </li>
                 </ul>
 
@@ -104,8 +104,8 @@
                 <a href="{{ path('app_commande') }}" class="btn btn-primary w-100">
                     Passer commande
                 </a>
-                {# Bouton pour vider le panier #}
-                <a href="{{ path('app_supprimer_panier_all') }}" class="btn btn-danger mt-2 w-100">
+                {# Bouton pour vider le panier avec protection CSRF #}
+                <a href="{{ path('app_supprimer_panier_all', {'_token': csrf_token('supprimer_all')}) }}" class="btn btn-danger mt-2 w-100">
                     Vider le panier
                 </a>
             </div>
